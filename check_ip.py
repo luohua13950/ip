@@ -3,8 +3,8 @@ __author__ = 'luohua139'
 import asyncio, aiohttp
 import random
 import time
-from ip_pool.crawl_ip import RedisClient, Config,logger
-from ip_pool import USER_AGENT
+from crawl_ip import RedisClient, Config,logger
+from agent import USER_AGENT
 
 
 class CheckIpValid():

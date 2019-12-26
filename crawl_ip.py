@@ -11,7 +11,7 @@ import threading
 from multiprocessing import Process
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s',filename="crawl_ip.log",filemode="a")
 logger = logging.getLogger(__name__)
 
 headers = {
@@ -113,7 +113,7 @@ class BaseClass(type):
 
 
 class Crawl(metaclass=BaseClass):
-    def __init__(self, valid_period=20):
+    def __init__(self, valid_period=10):
         db_info = Config().db_config
         self.rc = RedisClient(**db_info)
         self.valid_period = valid_period
