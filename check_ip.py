@@ -3,10 +3,12 @@ __author__ = 'luohua139'
 import asyncio, aiohttp
 import random
 import time
+import logging
 from crawl_ip import RedisClient, Config,logger
 from agent import USER_AGENT
 
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s',filename="check.log",filemode="a")
+logger = logging.getLogger(__name__)
 class CheckIpValid():
     def __init__(self):
         self.test_url = "http://www.baidu.com"
@@ -42,12 +44,6 @@ class CheckIpValid():
             except asyncio.TimeoutError:
                 logger.warning("{} is timeout".format(proxies))
                 self.redis.decr(proxies)
-            # except aiohttp.client_exceptions.ClientProxyConnectionError as e:
-            #     logger.error("{} is {}".format(proxies,e))
-            #     self.redis.decr(proxies)
-            # except ConnectionRefusedError as e:
-            #     logger.error("{} is {}".format(proxies,e))
-            #     self.redis.decr(proxies)
             except Exception as e:
                 self.redis.decr(proxies)
                 logger.warning("{} is {}".format(proxies,e))
