@@ -4,14 +4,16 @@ import asyncio, aiohttp
 import random
 import time
 import logging
-from crawl_ip import RedisClient, Config,logger
+from crawl_ip import RedisClient, Config
 from agent import USER_AGENT
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s',filename="check.log",filemode="a")
+#logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s',filename="check.log",filemode="a")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s')
 logger = logging.getLogger(__name__)
 class CheckIpValid():
     def __init__(self):
         self.test_url = "http://www.baidu.com"
+        self.test_url_360 = "https://hao.360.com/"
         self.count = 0
         self.batch_size = 50
         self.db_config = Config().db_config
@@ -19,6 +21,7 @@ class CheckIpValid():
 
     def get_proxies(self,start = 0,end=-1,http_type = "http"):
         _proxies_list = self.redis.batch(start=start,end=end)
+        print(_proxies_list[:10])
         if not _proxies_list:
             logger.error("{}到{}的代理不存在，请重新输入".format(start,end))
             return
@@ -56,6 +59,7 @@ class CheckIpValid():
     def run_loop(self):
         prx_batch = self.get_proxies()
         len_prx = len(prx_batch)
+        print(len_prx)
         #str_type_proxies = self.get_str_type_proxies(prx_batch)
         loop = asyncio.get_event_loop()
         for i in range(0,len_prx,self.batch_size):

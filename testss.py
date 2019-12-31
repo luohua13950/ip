@@ -5,7 +5,7 @@ import agent
 import re
 from lxml import etree
 def req():
-    url = "http://www.66ip.cn/{}.html"
+    url = "https://www.66ip.cn/{}.html"
     resp = requests.get(url.format(2))
 
     html_xpath = etree.HTML(resp.text)

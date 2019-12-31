@@ -15,7 +15,7 @@ from multiprocessing import Process
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s',
 filename="crawl_ip.log", filemode="a")
 # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s ： %(message)s', )
-# logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
@@ -41,8 +41,9 @@ class RedisClient():
     INIT_SCORE = 100
     LIMITED = 10000
 
-    def __init__(self, host, port, password, db, ):
-        self.redis = redis.StrictRedis(host=host, port=port, password=password, db=db, decode_responses=True)
+    def __init__(self, host, port, password, db, max_connections = 5):
+        pool = redis.ConnectionPool(host=host, port=port, password=password, db=db,max_connections = max_connections,decode_responses=True)
+        self.redis = redis.StrictRedis(connection_pool= pool)
 
     def add(self, proxies, score=INIT_SCORE, name="proxies"):
         ret = self.redis.zadd(name=name, mapping={proxies: score})
